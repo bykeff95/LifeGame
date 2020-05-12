@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+		.row{
+			width: 1000px;
+			height: 10px;
+		}
+		.square{
+			width: 10px;
+			height: 10px;
+			float: left;
+			/*border: 1px solid black*/
+		}
+		.living{
+			background-color: rgba(25,200,25,0.4);
+		}
+		.dead{
+			background-color: rgba(25,25,25,0.7);
+		}
+		.prove{
+			background-color: rgba(100,100,100,0.5);
+		}
+		.firstInRow{
+			background-color: rgba(250,25,25,0.8);
+		}
+		.lastInRow{
+			background-color: rgba(25,250,25,0.8);
+		}
+	</style>
+</head>
+<body>
+	<div id="container">
+		
+	</div>
+	<script type="text/javascript" src="generateBoard.js"></script>
+	<script type="text/javascript" src="firstInRow.js"></script>
+	<script type="text/javascript" src="lastInRow.js"></script>
+	<script type="text/javascript" src="middlesInRow.js"></script>
+	<script type="text/javascript">
+		container=document.getElementById('container')
+		generateBoard();
+		squares=document.getElementsByClassName('square');
+		arr=[10,50,200,600,1200,624,625,626,724,726,901,902,903,904,1001,1002,1003,1004];
+		for (var i = 0; i < arr.length; i++) {
+			squares[arr[i]].className='square living';
+		}
+		newSquares=[];
+		game = setInterval(function () {
+			for (var i = 0; i < squares.length; i++) {
+				if (i%100==0){
+					newSquares[i] = evaluateFirstsInRows(i);
+				} else if((i+1)%100==0){
+					newSquares[i] = evaluateLastsInRows(i);
+				} else{
+					newSquares[i]= evaluateMiddlesInRows(i); 
+				}
+			}
+			for (var i = 0; i < newSquares.length; i++) {
+				if (newSquares[i]=='l') {
+					squares[i].className='square living'
+				} else {
+					squares[i].className='square dead'				
+				}
+			}
+			if (newSquares.indexOf('l')==-1) {
+				clearInterval(game)
+			}else{
+				console.log('New iteration')
+			}
+		}, 1250)
+	</script>
+</body>
+</html>
